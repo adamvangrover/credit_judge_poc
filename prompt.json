@@ -1,0 +1,23 @@
+{"file_path": "credit_judge_poc/README.md", "content_placeholder": "# Credit Judge PoC\n\nProject overview, setup instructions, and usage guidelines for the Credit Judge Proof of Concept."}
+{"file_path": "credit_judge_poc/requirements.txt", "content_placeholder": "# List of Python package dependencies\n# e.g.,\n# pandas==X.Y.Z\n# openai==X.Y.Z\n# python-dotenv==X.Y.Z"}
+{"file_path": "credit_judge_poc/run_credit_judge_poc.py", "content_placeholder": "# Main script to execute the Credit Judge PoC pipeline.\n# Loads a report, processes it section by section using the Credit Judge LLM,\n# and outputs the structured evaluation."}
+{"file_path": "credit_judge_poc/data/reports_to_be_judged/msft_sim_report.txt", "content_placeholder": "Simulated credit report for MSFT to be judged by the LLM. (Content: Text format)"}
+{"file_path": "credit_judge_poc/data/reports_to_be_judged/dkng_ai_report.json", "content_placeholder": "AI-generated credit report for DKNG to be judged by the LLM. (Content: JSON format)"}
+{"file_path": "credit_judge_poc/data/gold_standard_reviews/msft_review_table.json", "content_placeholder": "Expert-created 'gold standard' review table for the MSFT report. (Content: JSON structured review)"}
+{"file_path": "credit_judge_poc/data/gold_standard_reviews/dkng_review_table.json", "content_placeholder": "Expert-created 'gold standard' review table for the DKNG report. (Content: JSON structured review)"}
+{"file_path": "credit_judge_poc/notebooks/01_data_preparation.ipynb", "content_placeholder": "Jupyter notebook for exploring, preparing, and preprocessing input reports and expert review data."}
+{"file_path": "credit_judge_poc/notebooks/02_judge_llm_prompting.ipynb", "content_placeholder": "Jupyter notebook for developing, testing, and iterating on prompts for the Credit Judge LLM."}
+{"file_path": "credit_judge_poc/src/__init__.py", "content_placeholder": "# Makes 'src' a Python package."}
+{"file_path": "credit_judge_poc/src/config.py", "content_placeholder": "# Configuration settings for the application.\n# e.g., API keys, model names, file paths, default parameters."}
+{"file_path": "credit_judge_poc/src/llm_interface/__init__.py", "content_placeholder": "# Makes 'llm_interface' a Python sub-package."}
+{"file_path": "credit_judge_poc/src/llm_interface/judge_llm_handler.py", "content_placeholder": "# Handles all interactions with the 'Credit Judge' LLM.\n# Includes functions for sending prompts and receiving/parsing LLM responses."}
+{"file_path": "credit_judge_poc/src/processing/__init__.py", "content_placeholder": "# Makes 'processing' a Python sub-package."}
+{"file_path": "credit_judge_poc/src/processing/report_parser.py", "content_placeholder": "# Functions to parse input credit reports.\n# Extracts relevant sections and content from various report formats (e.g., text, JSON)."}
+{"file_path": "credit_judge_poc/src/processing/review_formatter.py", "content_placeholder": "# Functions to format the Credit Judge LLM's output.\n# Structures the LLM's qualitative feedback and scores into the desired table format (e.g., JSON, markdown)."}
+{"file_path": "credit_judge_poc/src/prompts/__init__.py", "content_placeholder": "# Makes 'prompts' a Python sub-package."}
+{"file_path": "credit_judge_poc/src/prompts/judge_prompts.py", "content_placeholder": "# Stores and manages prompt templates for the Credit Judge LLM.\n# Contains base prompts, section-specific instructions, scoring rubrics, and few-shot examples."}
+{"file_path": "credit_judge_poc/src/core/__init__.py", "content_placeholder": "# Makes 'core' a Python sub-package."}
+{"file_path": "credit_judge_poc/src/core/credit_evaluator.py", "content_placeholder": "# Main orchestration logic for the credit evaluation process.\n# Iterates through report sections, invokes the LLM handler with appropriate prompts, and aggregates results."}
+{"file_path": "credit_judge_poc/src/utils/__init__.py", "content_placeholder": "# Utility functions shared across the project.\n# e.g., file I/O, logging, helper functions."}
+{"file_path": "credit_judge_poc/evaluation_poc/__init__.py", "content_placeholder": "# Makes 'evaluation_poc' a Python sub-package for PoC evaluation scripts."}
+{"file_path": "credit_judge_poc/evaluation_poc/evaluate_judge_outputs.py", "content_placeholder": "# Scripts to evaluate the performance of the Credit Judge LLM.\n# Compares LLM-generated review tables against 'gold_standard_reviews' and calculates metrics."}
