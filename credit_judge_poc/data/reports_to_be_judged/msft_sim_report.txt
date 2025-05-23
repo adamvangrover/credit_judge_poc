@@ -1,0 +1,1 @@
+Simulated credit report for MSFT to be judged by the LLM. (Content: Text format)
