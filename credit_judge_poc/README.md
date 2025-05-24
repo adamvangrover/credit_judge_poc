@@ -26,14 +26,17 @@ This Proof of Concept (PoC) is designed to demonstrate an LLM-based system for e
 
 -   **Core Logic (Conceptual & MVP):** Python modules for configuration, report parsing (`src/processing/report_parser.py`), review formatting (`src/processing/review_formatter.py`), and MVP orchestration (`run_credit_judge_poc.py`).
 
+
 ## Key Enhancements (Recent Updates)
 
 The PoC has been enhanced with:
+
 -   **Sophisticated Prompt Engineering & Library:** Implementation of a comprehensive library of detailed prompt templates for generating various types of credit-related content (AI reports, simulated inputs, expert reviews, comparison tables).
 -   **Advanced Mock Data & Generation Tools:** Creation of more realistic mock data and a dedicated Jupyter notebook (`03_data_generation_playground.ipynb`) for generating further varied data samples.
 -   **Enhanced Evaluation Framework:** The evaluation script outlines concepts for advanced evaluation.
 -   **Guided Prompt Development:** The `02_judge_llm_prompting.ipynb` notebook updated to cover usage of all prompts in the library.
 -   **MVP End-to-End Flow:** Implementation of a runnable `run_credit_judge_poc.py` script that simulates an end-to-end process using mock data.
+
 
 ## Setup Instructions
 
@@ -80,3 +83,28 @@ This MVP run validates that the core components are connected and data can flow 
     The generated data can be saved to `data/generated_mock_data/` and used to expand the test dataset for the PoC.
 
 ```
+=======
+    - A section-by-section comparison. For the MVP, since the mock AI report (`dkng_ai_report.json`) doesn't contain self-assigned quantitative scores for its sections that directly map to the gold standard's review scores, you will likely see "AI Score: Not Found/Not Applicable" for many quantitative comparisons within `evaluate_report_sections`. This is expected. The primary purpose is to show the flow and structure.
+    - A qualitative summary extracted and formatted from the AI report (e.g., company name, inferred rating, key strengths/weaknesses summary).
+    - A completion message.
+
+This MVP run validates that the core components are connected and data can flow through the system. Future iterations will involve replacing mock components with live LLM calls and more sophisticated processing.
+
+### Using Notebooks
+
+-   **`notebooks/01_data_preparation.ipynb`:** (Content to be developed) For exploring and preparing input data.
+-   **`notebooks/02_judge_llm_prompting.ipynb`:** Demonstrates how to assemble the detailed prompt for generating a corporate credit rating report. This can be used as a starting point for experimenting with different prompt parameters or sending prompts to an LLM.
+
+```
+- **Sophisticated Prompt Engineering:** Implementation of a detailed prompt template for generating in-depth corporate credit rating reports, including sections for financial overrides, human example comparisons, and specific focus areas.
+- **Advanced Mock Data:** Creation of more realistic and detailed mock data for both AI-generated reports (simulated RAG and structured JSON) and expert human review tables. This provides richer material for testing and evaluation.
+- **Enhanced Evaluation Framework:** The evaluation script now includes logic to parse detailed JSON reports and reviews, perform basic quantitative score comparisons, and outlines concepts for future enhancements like semantic text comparison and probability-based scoring.
+- **Guided Prompt Development:** The LLM prompting notebook (`notebooks/02_judge_llm_prompting.ipynb`) has been updated to reflect the usage of the new detailed prompt and includes placeholders for integrating more complex credit analysis techniques.
+
+## Setup Instructions
+
+(To be added - e.g., Python version, pip install requirements.txt)
+
+## Usage Guidelines
+
+(To be added - e.g., How to run the main script, how to use the notebooks)

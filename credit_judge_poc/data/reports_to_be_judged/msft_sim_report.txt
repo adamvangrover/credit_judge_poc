@@ -49,3 +49,5 @@
 "Microsoft announces new AI-powered 'Copilot' features across its Dynamics 365 and Power Platform services, aiming to enhance enterprise productivity and automation."
 
 *End of Retrieved Snippets*
+
+#Simulated credit report for MSFT to be judged by the LLM. (Content: Text format)
