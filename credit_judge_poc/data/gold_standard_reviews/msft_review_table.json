@@ -1,4 +1,3 @@
-
 {
   "reviewedReportId": "MSFT-Simulated-Report-2024-Q3",
   "reviewerName": "Dr. Credit Analyst, CFA",
@@ -53,5 +52,4 @@
     }
   ]
 }
-
 #Expert-created 'gold standard' review table for the MSFT report. (Content: JSON structured review)
