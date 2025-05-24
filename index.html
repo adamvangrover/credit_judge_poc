@@ -12,11 +12,13 @@
         - Conceptual Tables (e.g., Comparison Table Structure): Rendered as HTML tables. Goal: Inform/Structure. Method: HTML <table>. Interaction: Static display. Justification: Clear presentation of structured information.
         - Scoring Criteria: Presented as lists. Goal: Inform. Method: HTML <ul> / <ol>. Interaction: Static. Justification: Clear enumeration.
         - Interactive Chart (Comparative Scores): Grouped Bar Chart (Chart.js). Goal: Compare/Synthesize. Method: Canvas rendering via Chart.js. Interaction: Tooltips on hover. Data: Example scores from Section VI.D's table. Justification: Provides an immediate visual summary of the core comparison concept.
-        - ✨ Gemini API Integrations: Buttons triggering API calls. Goal: Enhance/Critique. Method: HTML buttons, JS fetch to Gemini, dynamic display of text results. Interaction: User click. Justification: Adds dynamic, AI-powered insights and counterpoints to static report content. -->
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
+        /* Custom scrollbar for a cleaner look (optional) */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -24,25 +26,25 @@
             background: #f1f1f1;
         }
         ::-webkit-scrollbar-thumb {
-            background: #c4b5fd; 
+            background: #c4b5fd; /* A light purple accent */
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #a78bfa; 
+            background: #a78bfa; /* Darker purple on hover */
         }
         .active-nav-link {
-            background-color: #e9d5ff; 
-            color: #5b21b6; 
+            background-color: #e9d5ff; /* Light purple for active link */
+            color: #5b21b6; /* Darker purple text for active link */
             font-weight: 600;
         }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 800px; 
+            max-width: 800px; /* Increased max-width for better chart display */
             margin-left: auto;
             margin-right: auto;
             height: 400px;
-            max-height: 50vh; 
+            max-height: 50vh; /* Adjusted for potentially taller charts */
         }
         @media (min-width: 768px) {
             .chart-container {
@@ -55,12 +57,12 @@
             }
         }
         pre {
-            background-color: #f3f4f6; 
-            border: 1px solid #e5e7eb; 
-            border-radius: 0.375rem; 
+            background-color: #f3f4f6; /* Light gray background for code blocks */
+            border: 1px solid #e5e7eb; /* Light border */
+            border-radius: 0.375rem; /* Rounded corners */
             padding: 1rem;
-            overflow-x: auto; 
-            font-size: 0.875rem; 
+            overflow-x: auto; /* Allow horizontal scrolling for long code lines */
+            font-size: 0.875rem; /* Slightly smaller font for code */
             line-height: 1.5;
         }
         code {
@@ -73,38 +75,16 @@
             margin-bottom: 1rem;
         }
         th, td {
-            border: 1px solid #d1d5db; 
+            border: 1px solid #d1d5db; /* Gray border for table cells */
             padding: 0.75rem;
             text-align: left;
         }
         th {
-            background-color: #f9fafb; 
+            background-color: #f9fafb; /* Very light gray for table headers */
             font-weight: 600;
         }
         h1, h2, h3, h4 {
-            scroll-margin-top: 4.5rem; 
-        }
-        .gemini-button {
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-            padding: 0.5rem 1rem;
-            background-color: #8b5cf6; /* Purple-600 */
-            color: white;
-            border-radius: 0.375rem; /* rounded-md */
-            font-weight: 500; /* medium */
-            transition: background-color 0.15s ease-in-out;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
-        .gemini-button:hover {
-            background-color: #7c3aed; /* Purple-700 */
-        }
-        .gemini-result-area {
-            margin-top: 0.5rem;
-            padding: 1rem;
-            background-color: #fffbeb; /* Amber-50 (lighter than body) */
-            border: 1px solid #fde68a; /* Amber-200 */
-            border-radius: 0.5rem; /* rounded-lg */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            scroll-margin-top: 4.5rem; /* Offset for fixed header/nav */
         }
     </style>
 </head>
@@ -294,8 +274,6 @@ llm_challenges_phrases = [
                     <li><strong>Financial Overview (Revenue):</strong> "The company has demonstrated strong revenue growth, primarily driven by the widespread adoption of its API services and increasing uptake of enterprise solutions."</li>
                     <li><strong>Risk Factors (Regulatory):</strong> "The evolving global regulatory framework for artificial intelligence presents uncertainties. Compliance with data privacy regulations and addressing societal concerns are important areas of focus."</li>
                 </ul>
-                <button id="expertTakeOnLLMSnippetsButton" class="gemini-button">✨ Get Expert Take on these LLM Snippets</button>
-                <div id="expertTakeOnLLMSnippetsResult" class="gemini-result-area hidden"></div>
 
                 <h3 class="text-2xl font-medium mt-6 mb-3">D. Utilizing NLP Libraries (Indirectly)</h3>
                 <p>NLP libraries can support by ensuring textual variety and maintaining tonal consistency (e.g., using TextBlob for sentiment checks).</p>
@@ -338,9 +316,7 @@ expert_financial_statement = ""
 
                 <h3 class="text-2xl font-medium mt-6 mb-3">C. Structuring the Simulated Expert Report Data</h3>
                 <p>Similar sections to the LLM report but with deeper, more critical content. Example for Financial Analysis:</p>
-                <p id="expertFinancialAnalysisSnippet">"While reported revenue growth is robust at an estimated X% year-over-year, the cost of goods sold (COGS), predominantly driven by escalating compute requirements for model training and inference, remains exceptionally high at approximately Y% of revenue. This compresses gross margins to Z%, a level that may be unsustainable without significant future efficiency gains or new, higher-margin revenue streams."</p>
-                <button id="counterargumentsToExpertViewButton" class="gemini-button">✨ Suggest Counterarguments to Expert View</button>
-                <div id="counterargumentsToExpertViewResult" class="gemini-result-area hidden"></div>
+                <p>"While reported revenue growth is robust at an estimated X% year-over-year, the cost of goods sold (COGS), predominantly driven by escalating compute requirements for model training and inference, remains exceptionally high at approximately Y% of revenue. This compresses gross margins to Z%, a level that may be unsustainable without significant future efficiency gains or new, higher-margin revenue streams."</p>
 
                 <h3 class="text-2xl font-medium mt-6 mb-3">D. Information Extraction as an Input to Simulation Style</h3>
                 <p>Conceptually, NLP tools like NER or regex could identify characteristic expert phrasing from actual reports to inform simulation style, though not the primary method here.</p>
@@ -604,7 +580,9 @@ def count_specific_keywords(text, keyword_list):
 
             function changeLinkState() {
                 let index = sections.length;
-                while(--index && window.scrollY + 100 < sections[index].offsetTop) {} 
+
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {} // 100px offset
+                
                 links.forEach((link) => link.classList.remove('active-nav-link'));
                 if (links[index]) {
                    links[index].classList.add('active-nav-link');
@@ -613,6 +591,7 @@ def count_specific_keywords(text, keyword_list):
 
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
+                    // For mobile, close sidebar on click
                     if (sidebar.classList.contains('translate-x-0') && window.innerWidth < 640) {
                          sidebar.classList.add('-translate-x-full');
                          sidebar.classList.remove('translate-x-0');
@@ -621,7 +600,7 @@ def count_specific_keywords(text, keyword_list):
             });
             
             window.addEventListener('scroll', changeLinkState);
-            changeLinkState(); 
+            changeLinkState(); // Initial check
 
             // Chart.js: Comparative Scores Chart
             const ctx = document.getElementById('comparisonChart');
@@ -637,41 +616,44 @@ def count_specific_keywords(text, keyword_list):
                         {
                             label: 'LLM Simulated Report',
                             data: [4, 2, 3, 2, 3, 4, 0.15, 0.40, 55, 5.2, 12, 18],
-                            backgroundColor: 'rgba(167, 139, 250, 0.6)', 
-                            borderColor: 'rgba(139, 92, 246, 1)', 
+                            backgroundColor: 'rgba(167, 139, 250, 0.6)', // Light Purple
+                            borderColor: 'rgba(139, 92, 246, 1)', // Purple
                             borderWidth: 1,
                             borderRadius: 5,
                         },
                         {
                             label: 'Expert Simulated Report',
                             data: [5, 4, 5, 4, 5, 4, 0.05, 0.60, 40, 9.5, 25, 22],
-                            backgroundColor: 'rgba(52, 211, 153, 0.6)', 
-                            borderColor: 'rgba(16, 185, 129, 1)', 
+                            backgroundColor: 'rgba(52, 211, 153, 0.6)', // Light Emerald
+                            borderColor: 'rgba(16, 185, 129, 1)', // Emerald
                             borderWidth: 1,
                             borderRadius: 5,
                         }
                     ]
                 };
 
+                // Tooltip label callback to handle different types of scores
                 const tooltipCallback = (context) => {
                     let label = context.dataset.label || '';
                     if (label) {
                         label += ': ';
                     }
                     if (context.parsed.y !== null) {
+                        // For scores that are not on 1-5 scale, show actual value
                         const metricName = context.label;
                         if (metricName.includes('Polarity') || metricName.includes('Subjectivity') || metricName.includes('Density') || metricName.includes('Length')) {
                             label += context.parsed.y.toFixed(2);
                         } else if (metricName.includes('Readability') || metricName.includes('Count')) {
                             label += context.parsed.y;
                         }
-                        else { 
+                        else { // Qualitative 1-5 scale
                              label += context.parsed.y + ' / 5';
                         }
                     }
                     return label;
                 };
                 
+                // Logic to wrap long labels
                 const wrapLabels = (labels, maxWidth) => {
                     return labels.map(label => {
                         if (label.length <= maxWidth) return label;
@@ -693,7 +675,7 @@ def count_specific_keywords(text, keyword_list):
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: wrapLabels(comparisonData.labels, 16), 
+                        labels: wrapLabels(comparisonData.labels, 16), // Wrap labels at 16 chars
                         datasets: comparisonData.datasets
                     },
                     options: {
@@ -702,108 +684,60 @@ def count_specific_keywords(text, keyword_list):
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                title: { display: true, text: 'Score / Value', font: { size: 14, weight: 'bold' }, color: '#4b5563' },
-                                ticks: { color: '#4b5563' } 
+                                title: {
+                                    display: true,
+                                    text: 'Score / Value',
+                                    font: { size: 14, weight: 'bold' },
+                                    color: '#4b5563' // stone-600
+                                },
+                                ticks: { color: '#4b5563' } // stone-600
                             },
                             x: {
-                                title: { display: true, text: 'Comparison Metrics', font: { size: 14, weight: 'bold' }, color: '#4b5563' },
-                                ticks: { color: '#4b5563', maxRotation: 45, minRotation: 45 }
+                                title: {
+                                    display: true,
+                                    text: 'Comparison Metrics',
+                                    font: { size: 14, weight: 'bold' },
+                                    color: '#4b5563' // stone-600
+                                },
+                                ticks: { 
+                                    color: '#4b5563', // stone-600
+                                    maxRotation: 45,
+                                    minRotation: 45 
+                                }
                             }
                         },
                         plugins: {
-                            legend: { position: 'top', labels: { font: { size: 12 }, color: '#374151' }},
+                            legend: {
+                                position: 'top',
+                                labels: { 
+                                    font: { size: 12 },
+                                    color: '#374151' // stone-700
+                                }
+                            },
                             tooltip: {
-                                mode: 'index', intersect: false, callbacks: { label: tooltipCallback },
-                                titleFont: { size: 14 }, bodyFont: { size: 12 },
-                                backgroundColor: 'rgba(0,0,0,0.7)', titleColor: '#ffffff', bodyColor: '#ffffff',
-                                padding: 10, cornerRadius: 4
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: tooltipCallback
+                                },
+                                titleFont: { size: 14 },
+                                bodyFont: { size: 12 },
+                                backgroundColor: 'rgba(0,0,0,0.7)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff',
+                                padding: 10,
+                                cornerRadius: 4
                             }
                         },
-                        animation: { duration: 1000, easing: 'easeInOutQuart' }
-                    }
-                });
-            }
-
-            async function callGeminiApi(prompt, resultElementId, loadingText) {
-                const resultDiv = document.getElementById(resultElementId);
-                if (!resultDiv) {
-                    console.error('Result element not found:', resultElementId);
-                    return;
-                }
-
-                resultDiv.innerHTML = `<p class="text-center text-purple-600 animate-pulse p-4">${loadingText || '✨ Thinking...'}</p>`;
-                resultDiv.classList.remove('hidden');
-
-                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-                const payload = { contents: chatHistory };
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.text();
-                        console.error('API Error Response:', errorData);
-                        throw new Error(`API request failed with status ${response.status}`);
-                    }
-
-                    const result = await response.json();
-
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        let text = result.candidates[0].content.parts[0].text;
-                        text = text.replace(/^\\s*[\\*\\-]\\s+/gm, '<li>').replace(/\\n/g, '</li>\\n');
-                        text = text.replace(/<\\/li>\\n$/, '</li>'); 
-                        if (text.includes('<li>')) {
-                             text = `<ul class="list-disc list-inside space-y-1 pl-4 mt-2 text-stone-700">${text}</ul>`;
-                        } else {
-                             text = `<p class="mt-2 text-stone-700">${text}</p>`;
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeInOutQuart'
                         }
-                        resultDiv.innerHTML = text;
-                    } else {
-                        console.error('Unexpected API response structure:', result);
-                        resultDiv.innerHTML = '<p class="text-red-600 p-4">Error: Could not retrieve insights. Unexpected response format.</p>';
                     }
-                } catch (error) {
-                    console.error('Error calling Gemini API:', error);
-                    resultDiv.innerHTML = `<p class="text-red-600 p-4">Error: Could not retrieve insights. ${error.message}</p>`;
-                }
-            }
-
-            const expertTakeButton = document.getElementById('expertTakeOnLLMSnippetsButton');
-            if (expertTakeButton) {
-                expertTakeButton.addEventListener('click', () => {
-                    const llmSnippet1 = "The company has demonstrated strong revenue growth, primarily driven by the widespread adoption of its API services and increasing uptake of enterprise solutions.";
-                    const llmSnippet2 = "The evolving global regulatory framework for artificial intelligence presents uncertainties. Compliance with data privacy regulations and addressing societal concerns are important areas of focus.";
-                    const prompt = `The following are example snippets from a simulated LLM-generated credit report for OpenAI:
-Snippet 1 (Financial Overview - Revenue): "${llmSnippet1}"
-Snippet 2 (Risk Factors - Regulatory): "${llmSnippet2}"
-
-What are 2-3 key insights, deeper questions, or nuanced considerations an expert credit analyst might add or focus on when presented with LLM-generated content like this, specifically for each snippet? Present as bullet points under each snippet's heading.`;
-                    callGeminiApi(prompt, 'expertTakeOnLLMSnippetsResult', '✨ Fetching expert perspective...');
-                });
-            }
-
-            const counterargumentsButton = document.getElementById('counterargumentsToExpertViewButton');
-            if (counterargumentsButton) {
-                counterargumentsButton.addEventListener('click', () => {
-                    const expertSnippetRaw = document.getElementById('expertFinancialAnalysisSnippet')?.textContent || "While reported revenue growth is robust, the cost of goods sold (COGS), predominantly driven by escalating compute requirements for model training and inference, remains exceptionally high. This compresses gross margins, a level that may be unsustainable without significant future efficiency gains or new, higher-margin revenue streams.";
-                    const expertSnippet = expertSnippetRaw.replace("X% year-over-year", "a high percentage year-over-year").replace("Y% of revenue", "a large portion of revenue").replace("Z%", "a specific compressed percentage");
-
-                    const prompt = `The following is an excerpt from a simulated expert credit analyst's report on OpenAI's financial analysis:
-"${expertSnippet}"
-
-Playing devil's advocate, what are 1-2 potential counterarguments, alternative interpretations, or data points that might challenge this expert's specific assertion about COGS, gross margins, and sustainability? Present as bullet points.`;
-                    callGeminiApi(prompt, 'counterargumentsToExpertViewResult', '✨ Generating counterarguments...');
                 });
             }
         });
     </script>
 </body>
 </html>
+
