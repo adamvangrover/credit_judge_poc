@@ -1,0 +1,61 @@
+{
+  "reviewedReportId": "DKNG-AI-Report-2024-Q3",
+  "reviewerName": "Prof. Gaming Investments",
+  "reviewDate": "2024-10-29",
+  "overallAssessment": {
+    "comments": "The AI's assessment of DraftKings (DKNG) correctly identifies the core tension between rapid growth and the path to profitability. The inferred 'B+' rating with a 'Stable' outlook is a reasonable interpretation of current data. The report covers key financial metrics, though a more forward-looking view on cash burn rate vs. available liquidity would be beneficial. The SNC 'Special Mention' is appropriate.",
+    "overallScore": 8.0,
+    "ratingConcurrence": "Agree"
+  },
+  "sectionReviews": [
+    {
+      "sectionName": "Overview",
+      "qualitativeFeedback": "Good description of DKNG's business model and market position. Correctly highlights new state openings and Jackpocket acquisition as key strategic elements. The summary of challenges is accurate.",
+      "quantitativeScore": 9,
+      "dataAccuracy": "N/A",
+      "completeness": 9
+    },
+    {
+      "sectionName": "Corporate Credit Rating",
+      "qualitativeFeedback": "The 'B+' Stable rating justification is sound, balancing market leadership and revenue growth against losses and FCF burn. The upgrade/downgrade triggers are well-defined and relevant to DKNG's current situation. Could add more emphasis on the competitive landscape's impact on promotional spend affecting the rating.",
+      "quantitativeScore": 8,
+      "dataAccuracy": "N/A",
+      "completeness": 8
+    },
+    {
+      "sectionName": "Financial Performance",
+      "qualitativeFeedback": "Q3 2024 data for revenue and Adj. EBITDA are consistent with expectations. Net Income and FCF figures correctly reflect ongoing investments. The leverage section notes Net Debt and cash appropriately. A deeper dive into state-level cohort profitability trends or customer acquisition cost (CAC) vs. lifetime value (LTV) would elevate the analysis.",
+      "quantitativeScore": 7,
+      "dataAccuracy": 9,
+      "completeness": 7
+    },
+    {
+      "sectionName": "SNCF Regulatory Rating",
+      "qualitativeFeedback": "The 'Special Mention' is well-justified given the company's financial profile. The triggers for upgrade/downgrade are appropriate for this indicative rating.",
+      "quantitativeScore": 9,
+      "dataAccuracy": "N/A",
+      "completeness": 9
+    },
+    {
+      "sectionName": "Strengths",
+      "qualitativeFeedback": "Comprehensive list of strengths, including brand, market share, tech stack, and improving Adj. EBITDA. These are key pillars of DKNG's credit story.",
+      "quantitativeScore": 9,
+      "dataAccuracy": "N/A",
+      "completeness": 9
+    },
+    {
+      "sectionName": "Weaknesses",
+      "qualitativeFeedback": "Accurate list of weaknesses: GAAP losses, FCF burn, marketing spend, regulatory risk, Jackpocket integration. These are the primary constraints on the credit profile.",
+      "quantitativeScore": 9,
+      "dataAccuracy": "N/A",
+      "completeness": 9
+    },
+    {
+      "sectionName": "Special Focus Areas",
+      "qualitativeFeedback": "The focus on Jackpocket integration and path to GAAP profitability/FCF is spot on. Analysis here should ideally include expected timelines or milestones for these areas to show material impact.",
+      "quantitativeScore": 8,
+      "dataAccuracy": "N/A",
+      "completeness": 8
+    }
+  ]
+}
