@@ -1,6 +1,5 @@
 # Scripts to evaluate the performance of the Credit Judge LLM.
 # Compares LLM-generated review tables against 'gold_standard_reviews' and calculates metrics.
-#<<<<<<< initial-scaffold
 
 import json
 import os
@@ -192,5 +191,3 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-=======
-#>>>>>>> main

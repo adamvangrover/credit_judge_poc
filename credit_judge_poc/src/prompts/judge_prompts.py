@@ -1,6 +1,5 @@
 # Stores and manages prompt templates for the Credit Judge LLM.
 # Contains base prompts, section-specific instructions, scoring rubrics, and few-shot examples.
-#<<<<<<< initial-scaffold
 
 # credit_judge_poc/src/prompts/judge_prompts.py
 
@@ -102,5 +101,3 @@ D.  **(Optional) Special Focus Areas:** {{special_focus_areas}}
 # human_example_report_text="N/A" # Or actual human report text
 # )
 # print(final_prompt)
-=======
-#>>>>>>> main
