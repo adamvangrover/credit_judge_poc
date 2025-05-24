@@ -1,3 +1,4 @@
+#<<<<<<< initial-scaffold
 {
   "reportTitle": "AI-Generated Corporate Credit Assessment: DraftKings Inc. (DKNG)",
   "assessmentDate": "2024-10-28",
@@ -85,3 +86,6 @@
     "Path to Sustained GAAP Profitability & FCF: Monitor progress in reducing marketing spend as a percentage of revenue in mature markets, achieving positive net income, and generating consistent positive free cash flow."
   ]
 }
+=======
+AI-generated credit report for DKNG to be judged by the LLM. (Content: JSON format)
+#>>>>>>> main
