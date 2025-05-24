@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Report Comparison Workflow Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+        - Report Text: Presented in readable, well-formatted blocks. Goal: Inform. Method: HTML paragraphs, lists, headings. Interaction: Scroll-based navigation. Justification: Standard for textual reports.
+        - Python Code Snippets: Displayed in preformatted blocks. Goal: Inform/Illustrate. Method: HTML <pre><code> with Tailwind styling. Interaction: Static. Justification: Essential for understanding implementation.
+        - Conceptual Tables (e.g., Comparison Table Structure): Rendered as HTML tables. Goal: Inform/Structure. Method: HTML <table>. Interaction: Static display. Justification: Clear presentation of structured information.
+        - Scoring Criteria: Presented as lists. Goal: Inform. Method: HTML <ul> / <ol>. Interaction: Static. Justification: Clear enumeration.
+        - Interactive Chart (Comparative Scores): Grouped Bar Chart (Chart.js). Goal: Compare/Synthesize. Method: Canvas rendering via Chart.js. Interaction: Tooltips on hover. Data: Example scores from Section VI.D's table. Justification: Provides an immediate visual summary of the core comparison concept.
+        - ✨ Gemini API Integrations: Buttons triggering API calls. Goal: Enhance/Critique. Method: HTML buttons, JS fetch to Gemini, dynamic display of text results. Interaction: User click. Justification: Adds dynamic, AI-powered insights and counterpoints to static report content. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c4b5fd; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a78bfa; 
+        }
+        .active-nav-link {
+            background-color: #e9d5ff; 
+            color: #5b21b6; 
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; 
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh; 
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        pre {
+            background-color: #f3f4f6; 
+            border: 1px solid #e5e7eb; 
+            border-radius: 0.375rem; 
+            padding: 1rem;
+            overflow-x: auto; 
+            font-size: 0.875rem; 
+            line-height: 1.5;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        th, td {
+            border: 1px solid #d1d5db; 
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f9fafb; 
+            font-weight: 600;
+        }
+        h1, h2, h3, h4 {
+            scroll-margin-top: 4.5rem; 
+        }
+        .gemini-button {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #8b5cf6; /* Purple-600 */
+            color: white;
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 500; /* medium */
+            transition: background-color 0.15s ease-in-out;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .gemini-button:hover {
+            background-color: #7c3aed; /* Purple-700 */
+        }
+        .gemini-result-area {
+            margin-top: 0.5rem;
+            padding: 1rem;
+            background-color: #fffbeb; /* Amber-50 (lighter than body) */
+            border: 1px solid #fde68a; /* Amber-200 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-stone-800">
+
+    <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-amber-100 border-r border-amber-200 shadow-lg overflow-y-auto">
+        <div class="p-5">
+            <h2 class="text-2xl font-semibold text-purple-700 mb-6">Workflow Sections</h2>
+            <nav id="TableOfContents" class="space-y-2">
+                <a href="#section1" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">I. Introduction</a>
+                <a href="#section2" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">II. Foundational Setup</a>
+                <a href="#section3" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">III. LLM Report Simulation</a>
+                <a href="#section4" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">IV. Expert Report Simulation</a>
+                <a href="#section5" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">V. Scoring Mechanisms</a>
+                <a href="#section6" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">VI. Comparative Analysis</a>
+                <a href="#section7" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">VII. Assembling Workflow</a>
+                <a href="#section8" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">VIII. Advanced Considerations</a>
+                <a href="#section9" class="block px-3 py-2 rounded-md text-stone-700 hover:bg-amber-200 hover:text-purple-600 transition-colors duration-150">IX. Conclusion</a>
+            </nav>
+        </div>
+    </aside>
+
+    <button id="mobileNavToggle" data-drawer-target="sidebar" data-drawer-toggle="sidebar" aria-controls="sidebar" type="button" class="sm:hidden fixed top-4 left-4 z-50 inline-flex items-center p-2 text-sm text-purple-600 bg-amber-200 rounded-lg hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300">
+        <span class="sr-only">Open sidebar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+           <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+        </svg>
+    </button>
+
+    <main class="sm:ml-64 p-6 md:p-10 bg-amber-50 min-h-screen">
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-purple-800 leading-tight">
+                Structuring and Implementing a Comparative Workflow for Simulated LLM and Expert Credit Reports in Jupyter Notebooks
+            </h1>
+        </header>
+
+        <article class="prose prose-lg max-w-none prose-headings:text-purple-700 prose-a:text-emerald-600 hover:prose-a:text-emerald-700 prose-strong:text-purple-600 prose-code:bg-amber-100 prose-code:text-purple-700 prose-code:p-1 prose-code:rounded-md prose-pre:bg-stone-100 prose-pre:text-stone-800">
+            
+            <section id="section1" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">I. Introduction: Setting the Stage for Advanced Credit Report Simulation</h2>
+                <p class="mb-3">This section introduces the rationale and objectives for developing a Jupyter Notebook workflow to simulate, analyze, and compare credit reports for OpenAI, projected to May 2025. It highlights the significance of OpenAI as a case study and provides an overview of the proposed workflow.</p>
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Project Rationale and Objectives</h3>
+                <p>The proliferation of Large Language Models (LLMs) into various domains, including finance, presents both opportunities and challenges. LLMs demonstrate a remarkable capacity to generate complex textual documents, such as financial summaries and reports. However, the reliability, accuracy, and depth of these AI-generated documents necessitate rigorous evaluation, particularly when compared against benchmarks established by human experts. This report outlines a structured methodology for developing a Jupyter Notebook workflow designed to simulate, analyze, and compare credit reports for a specific entity—OpenAI, projected to its hypothetical state in May 2025.</p>
+                <p>The primary objectives of this endeavor are threefold:</p>
+                <ol class="list-decimal list-inside space-y-1 pl-4">
+                    <li>To simulate a credit report for OpenAI (as of May 2025) that mimics the characteristics of an LLM-generated output.</li>
+                    <li>To simulate a credit report for OpenAI (as of May 2025) that reflects the analytical depth and style of an expert credit analyst.</li>
+                    <li>To develop and implement a framework for generating a comparative analysis table, incorporating both qualitative and quantitative scoring, to evaluate the differences between these two simulated reports.</li>
+                </ol>
+                <p>Beyond the specific case study of OpenAI, this workflow aims to establish a methodological blueprint. Such a blueprint can be adapted for evaluating LLM-generated documents against expert analyses for other organizations, across different timeframes, or for various types of complex textual outputs. The process of defining metrics and applying them systematically is, in essence, a form of auditing. If LLMs are to be employed in critical financial tasks, such auditing frameworks become essential for building trust and validating their outputs.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. The Significance of OpenAI as a Case Study (Hypothetical May 2025 Context)</h3>
+                <p>OpenAI, as a pioneering and rapidly evolving entity in the field of artificial intelligence, serves as a compelling and complex subject for credit risk simulation. Its unique position at the forefront of AI research and development, coupled with a dynamic operational and financial landscape, presents a rich scenario for this analytical exercise.</p>
+                <p>The projection to May 2025 introduces a speculative dimension, requiring the formulation of plausible, informed assumptions regarding OpenAI's potential financial structure, market positioning, operational scale, and inherent risks. These risks could span regulatory challenges, intense technological competition, ethical considerations surrounding AI development, and the financial implications of large-scale model training and deployment. Credit reports are inherently about future repayment probability. For a company like OpenAI, whose operational and competitive landscape changes rapidly, a purely historical snapshot is less informative for credit assessment than a carefully considered projected view. Simulating its creditworthiness for May 2025 necessitates a forward-looking perspective on potential scenarios, including both risks (e.g., AI safety incidents, increased competition, regulatory headwinds) and opportunities (e.g., breakthroughs leading to new revenue streams), which represents a more advanced form of credit analysis.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Overview of the Jupyter Notebook Workflow</h3>
+                <p>Jupyter Notebooks provide an ideal environment for this multi-faceted analytical task due to their interactive nature, which supports iterative development and refinement. The proposed workflow within the Jupyter Notebook will be structured logically, encompassing:</p>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li><strong>Initial Setup:</strong> Configuration of the environment, library imports, and definition of foundational helper functions.</li>
+                    <li><strong>Data Simulation:</strong> Separate modules or sections for generating the textual content of the LLM-style report and the expert-driven report. This will involve defining the characteristics and content for OpenAI as of May 2025.</li>
+                    <li><strong>Scoring Mechanism Development:</strong> Creation of functions and rubrics for both quantitative (e.g., sentiment analysis, readability scores) and qualitative (e.g., depth of analysis, clarity) assessment of the reports.</li>
+                    <li><strong>Comparative Analysis:</strong> Implementation of code to apply the scoring mechanisms to both simulated reports and to generate a structured comparison table.</li>
+                    <li><strong>Conclusion and Interpretation:</strong> Summarizing the findings and discussing the implications of the comparison.</li>
+                </ul>
+                <p>This systematic approach, facilitated by the Jupyter environment, will allow for clear documentation, reproducible analysis, and a comprehensive evaluation of the simulated credit reports.</p>
+            </section>
+
+            <section id="section2" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">II. Foundational Setup: Structuring Your Jupyter Environment for Robust Analysis</h2>
+                <p class="mb-3">This section details best practices for organizing the Jupyter Notebook, essential library imports, defining helper functions, and maintaining code style for a robust analytical environment.</p>
+                
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Best Practices for Jupyter Notebook Organization</h3>
+                <p>Before embarking on the coding process, establishing a clear structure for the notebook and its associated files is crucial.</p>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li><strong>Establishing Purpose and Audience:</strong> The primary purpose of this notebook is the simulation of credit reports and their comparative analysis. The intended audience comprises individuals with technical proficiency in data science and NLP.</li>
+                    <li><strong>Modular Notebook Design:</strong> For this project, a single, well-structured notebook should suffice.</li>
+                    <li><strong>Logical Sectioning:</strong> The notebook should be divided into clear, logical sections using markdown headings and subheadings.</li>
+                    <li><strong>Directory Structure:</strong> A consistent directory structure is recommended: `notebooks/`, `data/simulated_reports/`, `src/` (optional).</li>
+                    <li><strong>Version Control and Reproducibility:</strong> Employ Git and maintain a `requirements.txt` file.</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. Essential Library Imports</h3>
+                <p>The initial code cell in the notebook should be dedicated to importing all necessary libraries.</p>
+                <pre><code class="language-python">
+# Core data manipulation and numerical operations
+import pandas as pd
+import numpy as np
+
+# NLP libraries for text processing and analysis
+import spacy
+from textblob import TextBlob
+# Consider NLTK as a supplementary option if specific functionalities are needed
+# import nltk
+# nltk.download('punkt') # Example for downloading NLTK resources
+
+# For regular expression-based parsing
+import re
+
+# For enhanced display of outputs in Jupyter
+from IPython.display import display, HTML, Markdown
+
+# For potential visualizations
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# For file system operations if needed
+import os
+
+# For generating random elements in simulations
+import random
+
+# For readability statistics
+# Ensure 'textstat' is installed: pip install textstat
+import textstat
+
+# Set a consistent style for plots
+plt.style.use('seaborn-v0_8-whitegrid')
+                </code></pre>
+                <p>This selection of libraries covers data handling, NLP tasks, display enhancements, and other utilities.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Defining Helper Functions for Common Tasks</h3>
+                <p>Common operations should be encapsulated within helper functions to adhere to the DRY principle.</p>
+                <pre><code class="language-python">
+def save_text_to_file(text_content, file_path, file_name):
+    """Saves given text content to a file in the specified path."""
+    if not os.path.exists(file_path):
+        os.makedirs(file_path)
+    full_file_path = os.path.join(file_path, file_name)
+    with open(full_file_path, 'w', encoding='utf-8') as f:
+        f.write(text_content)
+    print(f"Report saved to {full_file_path}")
+
+def load_text_from_file(file_path, file_name):
+    """Loads text content from a file."""
+    full_file_path = os.path.join(file_path, file_name)
+    if not os.path.exists(full_file_path):
+        print(f"Error: File not found at {full_file_path}")
+        return None
+    with open(full_file_path, 'r', encoding='utf-8') as f:
+        text_content = f.read()
+    return text_content
+
+# Example of a simple text cleaning function (can be expanded)
+def clean_text(text):
+    """Basic text cleaning: remove extra whitespace."""
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+                </code></pre>
+                <p><strong>Code Style:</strong> Adherence to general Python code style guidelines, such as PEP 8, is recommended.</p>
+            </section>
+
+            <section id="section3" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">III. Simulating an LLM-Generated Credit Report for OpenAI (May 2025)</h2>
+                <p class="mb-3">This section discusses conceptualizing LLM output characteristics, Python techniques for simulation, structuring the report data, and the indirect use of NLP libraries.</p>
+                
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Conceptualizing LLM Output Characteristics</h3>
+                 <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Fluency and Coherence</li>
+                    <li>Potential for Generic Content</li>
+                    <li>Risk of Hallucinations/Factual Inaccuracies</li>
+                    <li>Sensitivity to Prompting</li>
+                    <li>Reflection of Training Data Biases</li>
+                    <li>Common Stylistic Artifacts</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. Python Techniques for Simulating LLM-Style Text</h3>
+                <p>Techniques include template-based generation with stochasticity and simplified rule-based generation.</p>
+                <pre><code class="language-python">
+# Example Snippet for a template:
+llm_outlook_phrases = [
+    "is well-positioned to", "appears poised to", "has the potential to",
+    "is expected to continue its trajectory of"
+]
+llm_challenges_phrases = [
+    "significant competition", "evolving regulatory landscapes",
+    "the need for substantial ongoing investment", "scalability hurdles"
+]
+#... in the generation logic...
+# outlook_statement = f"OpenAI {random.choice(llm_outlook_phrases)} leverage emerging AI trends. "
+# outlook_statement += f"However, it must navigate {random.choice(llm_challenges_phrases)}."
+                </code></pre>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Structuring the Simulated LLM Report Data</h3>
+                <p>The report should cover Executive Summary, Company Profile, Financial Overview, Market Position & Competitive Landscape, Risk Factors, and Outlook, with content styled to mimic LLM output.</p>
+                <p><strong>Example Content Snippets:</strong></p>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li><strong>Financial Overview (Revenue):</strong> "The company has demonstrated strong revenue growth, primarily driven by the widespread adoption of its API services and increasing uptake of enterprise solutions."</li>
+                    <li><strong>Risk Factors (Regulatory):</strong> "The evolving global regulatory framework for artificial intelligence presents uncertainties. Compliance with data privacy regulations and addressing societal concerns are important areas of focus."</li>
+                </ul>
+                <button id="expertTakeOnLLMSnippetsButton" class="gemini-button">✨ Get Expert Take on these LLM Snippets</button>
+                <div id="expertTakeOnLLMSnippetsResult" class="gemini-result-area hidden"></div>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">D. Utilizing NLP Libraries (Indirectly)</h3>
+                <p>NLP libraries can support by ensuring textual variety and maintaining tonal consistency (e.g., using TextBlob for sentiment checks).</p>
+            </section>
+
+            <section id="section4" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">IV. Simulating an Expert Credit Report for OpenAI (May 2025)</h2>
+                <p class="mb-3">This part focuses on defining expert report characteristics, Python techniques for simulating such content, structuring the data, and the conceptual role of information extraction.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Defining Characteristics of an Expert Credit Report</h3>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Depth of Analysis</li>
+                    <li>Specific Financial Metrics and Ratios</li>
+                    <li>Nuanced and Granular Risk Assessment</li>
+                    <li>Clear Rationale and Evidence-Based Opinions</li>
+                    <li>Conciseness and Precision</li>
+                    <li>Industry-Specific Insights</li>
+                    <li>Forward-Looking Statements with Assumptions and Caveats</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. Python Techniques for Simulating Expert-Driven Content</h3>
+                <p>Techniques include rule-based systems with embedded domain logic, incorporating domain-specific keywords, and structured data-to-text with analytical framing.</p>
+                <pre><code class="language-python">
+# Example of a rule:
+# Hypothetical inputs for simulation
+simulated_annual_rd_spend_usd = 5_000_000_000 # $5B
+simulated_annual_revenue_usd = 3_000_000_000  # $3B
+simulated_revenue_growth_rate = 0.60         # 60%
+
+expert_financial_statement = ""
+# if simulated_annual_rd_spend_usd > 0.5 * simulated_annual_revenue_usd:
+#     expert_financial_statement += (
+#         "OpenAI's aggressive R&D expenditure, currently estimated at "
+#         f"USD {simulated_annual_rd_spend_usd/1e9:.1f} billion, significantly outpaces direct revenue "
+#         "conversion. This strategy, while aimed at securing long-term technological dominance, "
+#         "presents a material near-term profitability challenge and heightens reliance on external funding. "
+#         "Close monitoring of cash burn rates and the existing funding runway is critical. "
+#     )
+                </code></pre>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Structuring the Simulated Expert Report Data</h3>
+                <p>Similar sections to the LLM report but with deeper, more critical content. Example for Financial Analysis:</p>
+                <p id="expertFinancialAnalysisSnippet">"While reported revenue growth is robust at an estimated X% year-over-year, the cost of goods sold (COGS), predominantly driven by escalating compute requirements for model training and inference, remains exceptionally high at approximately Y% of revenue. This compresses gross margins to Z%, a level that may be unsustainable without significant future efficiency gains or new, higher-margin revenue streams."</p>
+                <button id="counterargumentsToExpertViewButton" class="gemini-button">✨ Suggest Counterarguments to Expert View</button>
+                <div id="counterargumentsToExpertViewResult" class="gemini-result-area hidden"></div>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">D. Information Extraction as an Input to Simulation Style</h3>
+                <p>Conceptually, NLP tools like NER or regex could identify characteristic expert phrasing from actual reports to inform simulation style, though not the primary method here.</p>
+            </section>
+
+            <section id="section5" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">V. Implementing Qualitative and Quantitative Scoring Mechanisms</h2>
+                <p class="mb-3">This section details the definition of qualitative scoring criteria (rubric-based) and quantitative metrics (automated), along with coding functions to apply them.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Defining Criteria for Qualitative Scoring (Rubric-Based Approach)</h3>
+                <p>A 1-5 rating scale for criteria such as:</p>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Clarity and Coherence</li>
+                    <li>Depth of Analysis</li>
+                    <li>Identification and Articulation of Key Risks</li>
+                    <li>Actionability/Insightfulness for Credit Decisions</li>
+                    <li>Specificity to OpenAI (May 2025 Context)</li>
+                    <li>Balanced Perspective</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. Defining Metrics for Quantitative Scoring</h3>
+                <p>Automated metrics include:</p>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li><strong>Sentiment Analysis:</strong> Polarity and Subjectivity (e.g., using TextBlob).</li>
+                    <li><strong>Readability Scores:</strong> Flesch Reading Ease, Gunning Fog Index (e.g., using `textstat`).</li>
+                    <li><strong>Keyword/Keyphrase Density:</strong> Frequency of predefined positive/negative financial terms and AI-specific jargon.</li>
+                    <li><strong>Factual Density (Proxy):</strong> Count of numerical figures, dates, named entities (using spaCy NER).</li>
+                    <li><strong>Length/Verbosity Metrics:</strong> Word count, sentence count, average sentence length.</li>
+                    <li><strong>(Advanced) Text Semantic Similarity/Divergence:</strong> Cosine similarity of vector embeddings.</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Coding Functions to Apply Scoring Mechanisms</h3>
+                <p>Python functions for each quantitative metric.</p>
+                <pre><code class="language-python">
+# Example function for sentiment analysis using TextBlob
+def calculate_sentiment_textblob(text):
+    """Calculates polarity and subjectivity using TextBlob."""
+    blob = TextBlob(text)
+    return {"polarity": blob.sentiment.polarity, "subjectivity": blob.sentiment.subjectivity}
+
+# Example function for readability using textstat
+def calculate_readability_metrics(text):
+    """Calculates various readability scores using textstat."""
+    return {
+        "flesch_reading_ease": textstat.flesch_reading_ease(text),
+        "gunning_fog": textstat.gunning_fog(text),
+        "flesch_kincaid_grade": textstat.flesch_kincaid_grade(text),
+    }
+
+# Example function for keyword counting
+def count_specific_keywords(text, keyword_list):
+    """Counts occurrences of keywords from a given list in the text (case-insensitive)."""
+    text_lower = text.lower()
+    counts = {keyword: text_lower.count(keyword.lower()) for keyword in keyword_list}
+    return counts
+                </code></pre>
+            </section>
+
+            <section id="section6" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">VI. Generating the Comparative Analysis Table</h2>
+                <p class="mb-3">This section focuses on designing the comparison table structure, using Pandas DataFrames for its creation, and displaying it effectively. It also includes the interactive chart.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Designing the Structure of the Comparison Table</h3>
+                <p>Rows for each criterion/metric, columns for Criterion/Metric, LLM Report, Expert Report, Difference/Delta, and Notes/Observations.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. Using Pandas DataFrames for Table Creation</h3>
+                <p>Initialize an empty DataFrame and populate it iteratively with qualitative and quantitative scores.</p>
+                <pre><code class="language-python">
+# Example of adding a row for a quantitative metric:
+# comparison_columns = ["Criterion/Metric", "LLM Simulated Report", "Expert Simulated Report", "Difference/Delta", "Notes/Observations"]
+# comparison_df = pd.DataFrame(columns=comparison_columns)
+# sentiment_llm = {"polarity": 0.15, "subjectivity": 0.40} # Example data
+# sentiment_expert = {"polarity": 0.05, "subjectivity": 0.60} # Example data
+#
+# new_row_sentiment = pd.DataFrame([{
+#     "Criterion/Metric": "Overall Sentiment: Polarity",
+#     "LLM Simulated Report": sentiment_llm["polarity"],
+#     "Expert Simulated Report": sentiment_expert["polarity"],
+#     "Difference/Delta": sentiment_llm["polarity"] - sentiment_expert["polarity"],
+#     "Notes/Observations": "LLM report polarity vs. Expert report polarity."
+# }], columns=comparison_columns)
+# comparison_df = pd.concat([comparison_df, new_row_sentiment], ignore_index=True)
+                </code></pre>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Displaying the Table Effectively</h3>
+                <p>Use `IPython.display.HTML` for rendering the DataFrame as a styled HTML table.</p>
+                <pre><code class="language-python">
+# from IPython.display import display, HTML
+# Assuming comparison_df is populated
+# display(HTML(comparison_df.to_html(index=False, float_format='%.2f')))
+                </code></pre>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">D. Must-have Table: Comparative Analysis of Simulated OpenAI Credit Reports (May 2025)</h3>
+                <p class="mb-4">The following table presents an illustrative comparison. The chart below visualizes these example scores.</p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Criterion/Metric</th>
+                                <th>LLM Simulated Report (Score/Finding)</th>
+                                <th>Expert Simulated Report (Score/Finding)</th>
+                                <th>Difference/Delta</th>
+                                <th>Notes/Observations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="5" class="font-bold bg-amber-100">Qualitative Assessment (1-5 Scale)</td></tr>
+                            <tr><td>Clarity & Coherence</td><td>e.g., 4</td><td>e.g., 5</td><td>-1</td><td>Expert report potentially more direct.</td></tr>
+                            <tr><td>Depth of Analysis</td><td>e.g., 2</td><td>e.g., 4</td><td>-2</td><td>Expert report likely more critical.</td></tr>
+                            <tr><td>Identification & Articulation of Key Risks</td><td>e.g., 3</td><td>e.g., 5</td><td>-2</td><td>Expert details more specific risks.</td></tr>
+                            <tr><td>Actionability/Insightfulness</td><td>e.g., 2</td><td>e.g., 4</td><td>-2</td><td>Expert insights more pointed.</td></tr>
+                            <tr><td>Specificity to OpenAI</td><td>e.g., 3</td><td>e.g., 5</td><td>-2</td><td>Expert report more tailored.</td></tr>
+                            <tr><td>Balanced Perspective</td><td>e.g., 4</td><td>e.g., 4</td><td>0</td><td>Both aim for balance.</td></tr>
+                            <tr><td colspan="5" class="font-bold bg-amber-100">Quantitative Metrics</td></tr>
+                            <tr><td>Overall Sentiment: Polarity</td><td>e.g., 0.15</td><td>e.g., 0.05</td><td>0.10</td><td>LLM report may be slightly more positive.</td></tr>
+                            <tr><td>Overall Sentiment: Subjectivity</td><td>e.g., 0.40</td><td>e.g., 0.60</td><td>-0.20</td><td>Expert report more opinionated.</td></tr>
+                            <tr><td>Readability: Flesch Reading Ease</td><td>e.g., 55</td><td>e.g., 40</td><td>15</td><td>LLM report potentially easier to read.</td></tr>
+                            <tr><td>Density: "Risk" keywords (per 1k words)</td><td>e.g., 5.2</td><td>e.g., 9.5</td><td>-4.3</td><td>Expert report higher risk term density.</td></tr>
+                            <tr><td>Count: Numerical Figures</td><td>e.g., 12</td><td>e.g., 25</td><td>-13</td><td>Expert report more data points.</td></tr>
+                            <tr><td>Avg. Sentence Length (words)</td><td>e.g., 18</td><td>e.g., 22</td><td>-4</td><td>Expert report longer sentences.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-6 mb-3 text-xl font-semibold text-purple-700">Interactive Visualization of Comparative Scores:</p>
+                <p class="mb-4">This chart visually represents the example scores from the table above, comparing the characteristics of the simulated LLM-generated report versus the expert-analyzed report. Hover over the bars to see the specific scores.</p>
+                <div class="chart-container">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </section>
+
+            <section id="section7" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">VII. Assembling the Complete Jupyter Notebook Workflow</h2>
+                <p class="mb-3">This section covers guidance on cell organization, ensuring reproducibility, tips for code modularity, and the final review process.</p>
+                
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Guidance on Cell Organization and Logical Flow</h3>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Linear Execution: Top-to-bottom flow.</li>
+                    <li>Markdown for Narrative: Explain code purpose, rationale, and interpret results.</li>
+                    <li>Granular Cells: Break down complex code.</li>
+                    <li>Standard Sections: Title, Setup, Simulations, Scoring, Comparison, Conclusion.</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. Ensuring Reproducibility</h3>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Random Seeds: Set seeds for any stochastic processes.
+                        <pre><code class="language-python">
+# import random
+# import numpy as np
+# SEED = 42
+# random.seed(SEED)
+# np.random.seed(SEED)
+                        </code></pre>
+                    </li>
+                    <li>Library Versions: Document with `requirements.txt`.</li>
+                    <li>Data Provenance: Document sources and preprocessing (simulation logic is provenance here).</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Tips for Code Modularity and Reusability</h3>
+                 <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Helper Functions: Use consistently.</li>
+                    <li>External Python Scripts (`.py` files): For extensive logic, import custom modules.</li>
+                    <li>Configuration Parameters: Group at the beginning of the notebook.</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">D. Final Review and Walkthrough</h3>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Run All Cells: From a fresh kernel.</li>
+                    <li>Verify Logic and Outputs: Check simulations and scoring.</li>
+                    <li>Clarity of Explanations: Ensure markdown is clear and contextual.</li>
+                    <li>Consistency: In naming, style, and detail.</li>
+                </ul>
+            </section>
+
+            <section id="section8" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">VIII. Advanced Considerations and Best Practices</h2>
+                <p class="mb-3">This section explores data persistence, error handling, potential workflow extensions, and ethical considerations.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Data Persistence for Simulated Reports</h3>
+                <p>Saving generated text to external files avoids re-simulation and facilitates sharing.</p>
+                <pre><code class="language-python">
+# Using helper function defined earlier
+# save_text_to_file(llm_report_full_text, 'data/simulated_reports/', 'llm_openai_may2025.txt')
+# save_text_to_file(expert_report_full_text, 'data/simulated_reports/', 'expert_openai_may2025.txt')
+                </code></pre>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. Error Handling and Validation</h3>
+                <p>Use `try-except` blocks, input validation, and `assert` statements.</p>
+                <pre><code class="language-python">
+# try:
+#     # Code that might raise an error
+#     risky_calculation_result = complex_scoring_function(report_text)
+# except Exception as e:
+#     print(f"An error occurred: {e}")
+#     risky_calculation_result = None 
+                </code></pre>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Potential Extensions to the Workflow</h3>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Interactive Elements: Jupyter widgets (`ipywidgets`).</li>
+                    <li>More Sophisticated Text Generation: Calls to actual LLM APIs.</li>
+                    <li>Comparative Visualization: More charts with `matplotlib` or `seaborn`.</li>
+                    <li>Sensitivity Analysis: Vary simulation parameters.</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">D. Ethical Considerations</h3>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Responsibility in Interpretation.</li>
+                    <li>Bias in Simulation.</li>
+                    <li>Transparency in methods.</li>
+                </ul>
+            </section>
+
+            <section id="section9" class="mb-12 p-6 bg-white rounded-xl shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 border-b-2 border-amber-300 pb-2">IX. Conclusion and Future Directions</h2>
+                <p class="mb-3">This section recaps the workflow, acknowledges limitations, and suggests future refinements or applications.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">A. Recap of the Workflow and Key Achievements</h3>
+                <p>The workflow established a reusable methodology for simulating, scoring, and comparing complex textual reports, focusing on environment setup, dual report simulation, a hybrid scoring system, and comparative analysis table generation.</p>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">B. Limitations of the Simulation</h3>
+                 <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Hypothetical Nature of the OpenAI scenario.</li>
+                    <li>Stylized "LLM" and "Expert" personas.</li>
+                    <li>Fidelity of template/rule-based simulation.</li>
+                    <li>Subjectivity in qualitative scoring.</li>
+                </ul>
+
+                <h3 class="text-2xl font-medium mt-6 mb-3">C. Suggestions for Further Refinement or Application</h3>
+                <ul class="list-disc list-inside space-y-1 pl-4">
+                    <li>Adaptation to other contexts or document types.</li>
+                    <li>Expansion of scoring metrics (more NLP, refined qualitative dimensions).</li>
+                    <li>Benchmarking actual LLMs.</li>
+                    <li>Sensitivity analysis on simulation parameters.</li>
+                    <li>User studies with financial professionals.</li>
+                </ul>
+                <p>This project serves as an example of developing frameworks to evaluate AI-generated content, a growing need as LLMs become more integrated into professional workflows.</p>
+            </section>
+        </article>
+
+        <footer class="mt-12 pt-8 border-t border-amber-300 text-center text-stone-600">
+            <p>&copy; 2025 Credit Report Workflow Analyzer. For illustrative purposes.</p>
+        </footer>
+    </main>
+
+    <script>
+        // Sidebar toggle for mobile
+        const sidebar = document.getElementById('sidebar');
+        const mobileNavToggle = document.getElementById('mobileNavToggle');
+        
+        if (mobileNavToggle && sidebar) {
+            mobileNavToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebar.classList.toggle('translate-x-0');
+            });
+        }
+
+        // Smooth scroll and active link highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('#TableOfContents a');
+            const sections = document.querySelectorAll('main section[id]');
+
+            function changeLinkState() {
+                let index = sections.length;
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {} 
+                links.forEach((link) => link.classList.remove('active-nav-link'));
+                if (links[index]) {
+                   links[index].classList.add('active-nav-link');
+                }
+            }
+
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (sidebar.classList.contains('translate-x-0') && window.innerWidth < 640) {
+                         sidebar.classList.add('-translate-x-full');
+                         sidebar.classList.remove('translate-x-0');
+                    }
+                });
+            });
+            
+            window.addEventListener('scroll', changeLinkState);
+            changeLinkState(); 
+
+            // Chart.js: Comparative Scores Chart
+            const ctx = document.getElementById('comparisonChart');
+            if (ctx) {
+                const comparisonData = {
+                    labels: [
+                        'Clarity & Coherence', 'Depth of Analysis', 'Risk Identification', 
+                        'Actionability', 'Specificity', 'Balanced Perspective',
+                        'Sentiment: Polarity', 'Sentiment: Subjectivity', 'Readability (Flesch)',
+                        'Risk Keyword Density', 'Numerical Figures Count', 'Avg. Sentence Length'
+                    ],
+                    datasets: [
+                        {
+                            label: 'LLM Simulated Report',
+                            data: [4, 2, 3, 2, 3, 4, 0.15, 0.40, 55, 5.2, 12, 18],
+                            backgroundColor: 'rgba(167, 139, 250, 0.6)', 
+                            borderColor: 'rgba(139, 92, 246, 1)', 
+                            borderWidth: 1,
+                            borderRadius: 5,
+                        },
+                        {
+                            label: 'Expert Simulated Report',
+                            data: [5, 4, 5, 4, 5, 4, 0.05, 0.60, 40, 9.5, 25, 22],
+                            backgroundColor: 'rgba(52, 211, 153, 0.6)', 
+                            borderColor: 'rgba(16, 185, 129, 1)', 
+                            borderWidth: 1,
+                            borderRadius: 5,
+                        }
+                    ]
+                };
+
+                const tooltipCallback = (context) => {
+                    let label = context.dataset.label || '';
+                    if (label) {
+                        label += ': ';
+                    }
+                    if (context.parsed.y !== null) {
+                        const metricName = context.label;
+                        if (metricName.includes('Polarity') || metricName.includes('Subjectivity') || metricName.includes('Density') || metricName.includes('Length')) {
+                            label += context.parsed.y.toFixed(2);
+                        } else if (metricName.includes('Readability') || metricName.includes('Count')) {
+                            label += context.parsed.y;
+                        }
+                        else { 
+                             label += context.parsed.y + ' / 5';
+                        }
+                    }
+                    return label;
+                };
+                
+                const wrapLabels = (labels, maxWidth) => {
+                    return labels.map(label => {
+                        if (label.length <= maxWidth) return label;
+                        const words = label.split(' ');
+                        let currentLine = '';
+                        const wrappedLabel = [];
+                        words.forEach(word => {
+                            if ((currentLine + word).length > maxWidth) {
+                                wrappedLabel.push(currentLine.trim());
+                                currentLine = '';
+                            }
+                            currentLine += word + ' ';
+                        });
+                        wrappedLabel.push(currentLine.trim());
+                        return wrappedLabel;
+                    });
+                };
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: wrapLabels(comparisonData.labels, 16), 
+                        datasets: comparisonData.datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Score / Value', font: { size: 14, weight: 'bold' }, color: '#4b5563' },
+                                ticks: { color: '#4b5563' } 
+                            },
+                            x: {
+                                title: { display: true, text: 'Comparison Metrics', font: { size: 14, weight: 'bold' }, color: '#4b5563' },
+                                ticks: { color: '#4b5563', maxRotation: 45, minRotation: 45 }
+                            }
+                        },
+                        plugins: {
+                            legend: { position: 'top', labels: { font: { size: 12 }, color: '#374151' }},
+                            tooltip: {
+                                mode: 'index', intersect: false, callbacks: { label: tooltipCallback },
+                                titleFont: { size: 14 }, bodyFont: { size: 12 },
+                                backgroundColor: 'rgba(0,0,0,0.7)', titleColor: '#ffffff', bodyColor: '#ffffff',
+                                padding: 10, cornerRadius: 4
+                            }
+                        },
+                        animation: { duration: 1000, easing: 'easeInOutQuart' }
+                    }
+                });
+            }
+
+            async function callGeminiApi(prompt, resultElementId, loadingText) {
+                const resultDiv = document.getElementById(resultElementId);
+                if (!resultDiv) {
+                    console.error('Result element not found:', resultElementId);
+                    return;
+                }
+
+                resultDiv.innerHTML = `<p class="text-center text-purple-600 animate-pulse p-4">${loadingText || '✨ Thinking...'}</p>`;
+                resultDiv.classList.remove('hidden');
+
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.text();
+                        console.error('API Error Response:', errorData);
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        let text = result.candidates[0].content.parts[0].text;
+                        text = text.replace(/^\\s*[\\*\\-]\\s+/gm, '<li>').replace(/\\n/g, '</li>\\n');
+                        text = text.replace(/<\\/li>\\n$/, '</li>'); 
+                        if (text.includes('<li>')) {
+                             text = `<ul class="list-disc list-inside space-y-1 pl-4 mt-2 text-stone-700">${text}</ul>`;
+                        } else {
+                             text = `<p class="mt-2 text-stone-700">${text}</p>`;
+                        }
+                        resultDiv.innerHTML = text;
+                    } else {
+                        console.error('Unexpected API response structure:', result);
+                        resultDiv.innerHTML = '<p class="text-red-600 p-4">Error: Could not retrieve insights. Unexpected response format.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    resultDiv.innerHTML = `<p class="text-red-600 p-4">Error: Could not retrieve insights. ${error.message}</p>`;
+                }
+            }
+
+            const expertTakeButton = document.getElementById('expertTakeOnLLMSnippetsButton');
+            if (expertTakeButton) {
+                expertTakeButton.addEventListener('click', () => {
+                    const llmSnippet1 = "The company has demonstrated strong revenue growth, primarily driven by the widespread adoption of its API services and increasing uptake of enterprise solutions.";
+                    const llmSnippet2 = "The evolving global regulatory framework for artificial intelligence presents uncertainties. Compliance with data privacy regulations and addressing societal concerns are important areas of focus.";
+                    const prompt = `The following are example snippets from a simulated LLM-generated credit report for OpenAI:
+Snippet 1 (Financial Overview - Revenue): "${llmSnippet1}"
+Snippet 2 (Risk Factors - Regulatory): "${llmSnippet2}"
+
+What are 2-3 key insights, deeper questions, or nuanced considerations an expert credit analyst might add or focus on when presented with LLM-generated content like this, specifically for each snippet? Present as bullet points under each snippet's heading.`;
+                    callGeminiApi(prompt, 'expertTakeOnLLMSnippetsResult', '✨ Fetching expert perspective...');
+                });
+            }
+
+            const counterargumentsButton = document.getElementById('counterargumentsToExpertViewButton');
+            if (counterargumentsButton) {
+                counterargumentsButton.addEventListener('click', () => {
+                    const expertSnippetRaw = document.getElementById('expertFinancialAnalysisSnippet')?.textContent || "While reported revenue growth is robust, the cost of goods sold (COGS), predominantly driven by escalating compute requirements for model training and inference, remains exceptionally high. This compresses gross margins, a level that may be unsustainable without significant future efficiency gains or new, higher-margin revenue streams.";
+                    const expertSnippet = expertSnippetRaw.replace("X% year-over-year", "a high percentage year-over-year").replace("Y% of revenue", "a large portion of revenue").replace("Z%", "a specific compressed percentage");
+
+                    const prompt = `The following is an excerpt from a simulated expert credit analyst's report on OpenAI's financial analysis:
+"${expertSnippet}"
+
+Playing devil's advocate, what are 1-2 potential counterarguments, alternative interpretations, or data points that might challenge this expert's specific assertion about COGS, gross margins, and sustainability? Present as bullet points.`;
+                    callGeminiApi(prompt, 'counterargumentsToExpertViewResult', '✨ Generating counterarguments...');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
