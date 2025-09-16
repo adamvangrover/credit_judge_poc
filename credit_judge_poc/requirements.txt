@@ -1,5 +1,8 @@
-# List of Python package dependencies
-# e.g.,
-# pandas==X.Y.Z
-# openai==X.Y.Z
-# python-dotenv==X.Y.Z
+# This project currently has no external dependencies beyond standard Python libraries.
+# If packages like 'requests', 'numpy', or an LLM SDK (e.g., 'openai') were used,
+# they would be listed here.
+#
+# Example:
+# openai
+# pandas
+# numpy
