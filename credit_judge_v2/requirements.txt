@@ -1,0 +1,7 @@
+# Dependencies for the Credit Judge v2 application
+
+# For making API calls to OpenAI
+openai
+
+# For loading environment variables from a .env file
+python-dotenv

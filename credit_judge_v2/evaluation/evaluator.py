@@ -1,4 +1,3 @@
-# Scripts to evaluate the performance of the Credit Judge LLM.
 import json
 import textwrap
 
@@ -86,25 +85,3 @@ def display_qualitative_comparison(ai_report_data, gold_standard_data):
             print("  Content not found in AI report for this section.")
 
         print("\n" + "-"*80 + "\n")
-
-def main():
-    """
-    Main function for standalone execution to demonstrate the
-    qualitative comparison.
-    """
-    base_path = os.path.dirname(__file__)
-    ai_report_path = os.path.join(base_path, "..", "data", "reports_to_be_judged", "dkng_ai_report.json")
-    gold_standard_review_path = os.path.join(base_path, "..", "data", "gold_standard_reviews", "dkng_review_table.json")
-
-    ai_report_content = load_json_file(ai_report_path)
-    gold_standard_review_content = load_json_file(gold_standard_review_path)
-
-    if not ai_report_content or not gold_standard_review_content:
-        print("Exiting due to load errors.")
-        return
-
-    # Display the rich, qualitative comparison
-    display_qualitative_comparison(ai_report_content, gold_standard_review_content)
-
-if __name__ == "__main__":
-    main()
