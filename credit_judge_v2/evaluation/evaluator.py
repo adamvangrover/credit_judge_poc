@@ -1,5 +1,6 @@
 import json
 import textwrap
+from credit_judge_v2.src.processing.analysis import analyze_report_content
 
 def load_json_file(filepath):
     """Loads a JSON file from the given filepath."""
@@ -16,15 +17,31 @@ def load_json_file(filepath):
 def display_qualitative_comparison(ai_report_data, gold_standard_data):
     """
     Displays a side-by-side qualitative comparison of the AI report
-    and the gold standard review.
+    and the gold standard review, including quantitative analysis.
     """
     print("\n" + "="*80)
-    print(" " * 25 + "Qualitative Comparison Report")
+    print(" " * 25 + "Qualitative & Quantitative Comparison Report")
     print("="*80 + "\n")
+
+    # --- Quantitative Analysis ---
+    print("--- Quantitative Analysis of AI Report ---")
+    metrics = analyze_report_content(ai_report_data)
+
+    print(f"Report Length (chars): {metrics['full_text_length']}")
+    print(f"Sentiment Polarity (-1 to 1): {metrics['sentiment']['polarity']:.2f}")
+    print(f"Sentiment Subjectivity (0 to 1): {metrics['sentiment']['subjectivity']:.2f}")
+    print(f"Readability (Flesch Score): {metrics['readability']:.2f}")
+    print(f"Numerical Density (numbers/1000 words): {metrics['numerical_density']:.2f}")
+
+    print("\nKeyword Density (occurrences per 1000 words):")
+    for keyword, density in metrics['keyword_density'].items():
+        if density > 0:
+            print(f"  - {keyword}: {density:.2f}")
+    print("-" * 80 + "\n")
 
     # --- Overall Assessment ---
     overall_assessment = gold_standard_data.get("overallAssessment", {})
-    print("--- Overall Assessment of AI Report ---")
+    print("--- Overall Assessment of AI Report (Gold Standard Review) ---")
     print(f"Reviewer: {gold_standard_data.get('reviewerName', 'N/A')}")
     print(f"Overall Score by Reviewer: {overall_assessment.get('overallScore', 'N/A')}/10")
     print(f"Rating Concurrence: {overall_assessment.get('ratingConcurrence', 'N/A')}")

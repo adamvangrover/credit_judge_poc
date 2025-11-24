@@ -5,3 +5,7 @@ openai
 
 # For loading environment variables from a .env file
 python-dotenv
+
+# For NLP analysis
+textblob
+textstat
